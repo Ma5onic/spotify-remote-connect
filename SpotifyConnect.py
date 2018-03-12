@@ -150,4 +150,4 @@ class Connect:
 
 if __name__ == '__main__':
     _thread.start_new_thread(Connect.schedule.run, ())
-    Connect.app.run()
+    Connect.app.run(host='0.0.0.0')
