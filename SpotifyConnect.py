@@ -102,13 +102,48 @@ class Connect:
     def play():
         content: dict = request.get_json(silent=True)
         authorization_header = {"Authorization": "Bearer {}".format(Connect.access_token)}
+
+        # Resume Playback, or play the specified content
+        player_play_request_body: dict = dict()
         player_play_api_endpoint = "{}/me/player/play".format(Connect.SPOTIFY_API_URL)
 
         if content is not None and 'device_id' in content.keys():
             player_play_api_endpoint += "?device_id={}".format(content['device_id'])
-        player_play_response = requests.put(player_play_api_endpoint, headers=authorization_header)
 
+        if content is not None and 'context_uri' in content.keys():
+            player_play_request_body["context_uri"] = content["context_uri"]
+
+        player_play_response = requests.put(player_play_api_endpoint, headers=authorization_header,
+                                            data=json.dumps(player_play_request_body))
+        if int(player_play_response.status_code / 100) != 2:
+            return "Something went wrong", 400
         print(player_play_response.text)
+
+        # Turn on shuffle mode if requested
+        if content is not None and 'shuffle' in content.keys():
+            player_shuffle_api_endpoint = "{}/me/player/shuffle".format(Connect.SPOTIFY_API_URL)
+            player_shuffle_api_endpoint += "?state=" + str(bool(content['shuffle'])).lower()
+
+            if content is not None and 'device_id' in content.keys():
+                player_shuffle_api_endpoint += "&device_id={}".format(content['device_id'])
+
+            player_shuffle_response = requests.put(player_shuffle_api_endpoint, headers=authorization_header)
+            if int(player_shuffle_response.status_code / 100) != 2:
+                return "Something went wrong", 400
+            print(player_shuffle_response.text)
+
+        # Set the correct Volume if requested
+        if content is not None and 'volume' in content.keys():
+            player_volume_api_endpoint = "{}/me/player/volume".format(Connect.SPOTIFY_API_URL)
+            player_volume_api_endpoint += "?volume_percent=" + str(content['volume'])
+
+            if content is not None and 'device_id' in content.keys():
+                player_volume_api_endpoint += "&device_id={}".format(content['device_id'])
+
+            player_volume_response = requests.put(player_volume_api_endpoint, headers=authorization_header)
+            if int(player_volume_response.status_code / 100) != 2:
+                return "Something went wrong", 400
+            print(player_volume_response.text)
 
         return 'Playback Started!'
 
@@ -122,6 +157,8 @@ class Connect:
             player_play_api_endpoint += "?device_id={}".format(content['device_id'])
         player_play_response = requests.put(player_play_api_endpoint, headers=authorization_header)
 
+        if int(player_play_response.status_code / 100) != 2:
+            return "Something went wrong", 400
         print(player_play_response.text)
 
         return 'Playback Paused!'

@@ -33,6 +33,17 @@ Resume Playback. A device ID can be supplied in the request body with the follow
 {"deviceId" : "your-device-id"}
 ```
 
+Additionally, a context_uri can be supplied (like for a playlist, artist, or album) to have that played, as opposed to
+what would be played otherwise. This can be specified in the following format:
+```json
+{
+  "deviceId" : "your-device-id",
+  "context_uri" : "spotify:album:1Je1IMUlBXcx1Fz0WE7oPT",
+  "volume": 25,
+  "shuffle": true
+}
+```
+
 If a device ID is supplied, playback will resume on the specified device, else playback will resume on the active
 device, as determined by Spotify.
 
