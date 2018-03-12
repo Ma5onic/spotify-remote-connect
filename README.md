@@ -1,5 +1,8 @@
 Spotify Playback Controller
 ==========================
+[![](https://img.shields.io/docker/automated/tpaulus/spotify-remote-connect.svg?maxAge=2592000)](hub.docker.com/r/tpaulus/spotify-remote-connect/builds/)
+[![](https://images.microbadger.com/badges/image/tpaulus/spotify-remote-connect.svg)](https://microbadger.com/images/tpaulus/spotify-remote-connect)
+
 
 Control Playback of Spotify via a Simple API to allow for external services, like IFTTT to start and stop Spotify
 Playback. Controling Spotify in this manner requires a Spotify Premium Subscription.
