@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Spotify Connect</title>
+</head>
+<body>
+<main role="main" class="container">
+    <h1 class="mt-5">Spotify Remote Connect</h1>
+
+    <p class="lead">Hi there {{ profile['id'] }}!</p>
+
+
+    <h3>Devices</h3>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Id</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for device in devices %}
+        <tr>
+            <td>{{ device['name'] }}</td>
+            <td>{{ device['type'] }}</td>
+            <td>{{ device['id'] }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>
