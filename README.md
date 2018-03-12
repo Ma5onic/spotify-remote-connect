@@ -16,7 +16,7 @@ docker create --name SpotifyConnect \
     -e CLIENT_SIDE_URL='http://127.0.0.1' \
     -e PORT='5000' \
     --restart=always \
-    tpaulus/spotify-connect
+    tpaulus/spotify-remote-connect
 ```
 
 # Endpoints

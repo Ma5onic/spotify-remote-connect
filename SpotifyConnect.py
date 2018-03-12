@@ -103,7 +103,7 @@ class Connect:
         content: dict = request.get_json(silent=True)
         authorization_header = {"Authorization": "Bearer {}".format(Connect.access_token)}
         player_play_api_endpoint = "{}/me/player/play".format(Connect.SPOTIFY_API_URL)
-        
+
         if 'deviceId' in content.keys():
             player_play_api_endpoint += "?device_id={}".format(content['device_id'])
         player_play_response = requests.get(player_play_api_endpoint, headers=authorization_header)
