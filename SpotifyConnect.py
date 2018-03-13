@@ -214,7 +214,7 @@ class SpotifyAPI:
         player_transfer_request_body: dict = dict()
         player_transfer_api_endpoint = "{}/me/player".format(SpotifyAPI.SPOTIFY_API_URL)
 
-        player_transfer_request_body["device_ids"] = list(device_id)
+        player_transfer_request_body["device_ids"] = [device_id]
         player_transfer_request_body["play"] = True
 
         player_transfer_response = requests.put(player_transfer_api_endpoint, headers=authorization_header,
