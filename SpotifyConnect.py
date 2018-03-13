@@ -149,9 +149,8 @@ class SpotifyAPI:
     @classmethod
     def refresh_api_token(cls):
         code_payload = {
-            "grant_type": "authorization_code",
-            "code": str(SpotifyAPI.__refresh_token),
-            "redirect_uri": SpotifyAPI.REDIRECT_URI
+            "grant_type": "refresh_token",
+            "refresh_token": str(SpotifyAPI.__refresh_token),
         }
         base64encoded = base64.b64encode(
             bytes("{}:{}".format(SpotifyAPI.__CLIENT_ID, SpotifyAPI.__CLIENT_SECRET), 'utf-8')).decode('utf-8')
@@ -159,9 +158,10 @@ class SpotifyAPI:
         post_request = requests.post(SpotifyAPI.SPOTIFY_TOKEN_URL, data=code_payload, headers=headers)
 
         # Auth Step 5: Tokens are Returned to Application
-        response_data = json.loads(post_request.text)
+        response_data: dict = json.loads(post_request.text)
         SpotifyAPI.__access_token = response_data["access_token"]
-        SpotifyAPI.__refresh_token = response_data["refresh_token"]
+        SpotifyAPI.__refresh_token = response_data["refresh_token"] if "refresh_token" in response_data.keys() \
+            else SpotifyAPI.__refresh_token
         SpotifyAPI.__token_type = response_data["token_type"]
         SpotifyAPI.__expires_in = response_data["expires_in"]
 
