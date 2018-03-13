@@ -41,6 +41,20 @@ class Connect:
         context_id = content['context_uri'] if 'context_uri' in content.keys() else None
 
         # Resume Playback, or play the specified content
+        if device_id is not None and context_id is None:
+            # Transfer Playback Request
+            player_transfer_response = SpotifyAPI.transfer(device_id)
+            if player_transfer_response.status_code == 401:
+                # Unauthorized - Token is expired
+                SpotifyAPI.refresh_api_token()
+                player_transfer_response = SpotifyAPI.transfer(device_id)
+
+            if int(player_transfer_response.status_code / 100) != 2:
+                return "Something went wrong", 400
+            print(player_transfer_response.text)
+            return "Playback Transferred"
+
+        # Standard Play Request
         player_play_response = SpotifyAPI.play(context_uri=context_id, device_id=device_id)
         if player_play_response.status_code == 401:
             # Unauthorized - Token is expired
@@ -192,6 +206,20 @@ class SpotifyAPI:
         player_play_response = requests.put(player_play_api_endpoint, headers=authorization_header,
                                             data=json.dumps(player_play_request_body))
         return player_play_response
+
+    @staticmethod
+    def transfer(device_id: str) -> requests.Response:
+        authorization_header = {"Authorization": "Bearer {}".format(SpotifyAPI.__access_token)}
+
+        player_transfer_request_body: dict = dict()
+        player_transfer_api_endpoint = "{}/me/player".format(SpotifyAPI.SPOTIFY_API_URL)
+
+        player_transfer_request_body["device_ids"] = list(device_id)
+        player_transfer_request_body["play"] = True
+
+        player_transfer_response = requests.put(player_transfer_api_endpoint, headers=authorization_header,
+                                                data=json.dumps(player_transfer_request_body))
+        return player_transfer_response
 
     @staticmethod
     def pause(device_id: str = None) -> requests.Response:
